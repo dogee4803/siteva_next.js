@@ -32,7 +32,7 @@ bun dev
 Более подробно здесь: https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project/relational-databases-typescript-postgresql
 
 1) cd <ДИРЕКТОРИЯ_ПРОЕКТА>
-2) Установка ORM
+2) Установка ORM (По идее уже установлена в проекте по умолчанию)
    ```
    npm install prisma --save-dev 
    ```
