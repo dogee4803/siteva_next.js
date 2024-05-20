@@ -17,7 +17,7 @@ bun dev
 
 The site is launched at this address:http://localhost:3000
 
-Home page: `app/page.tsx`. Others: `app/pages/<путь к нужной странице>/page.tsx`.
+Home page: `app/page.tsx`. Others: `app/pages/<path_to_the_page>/page.tsx`.
 
 ## Docs
 
