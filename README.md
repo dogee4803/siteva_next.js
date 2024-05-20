@@ -1,4 +1,6 @@
 # Сайт на Next.js для системы виртуальных ассистентов
+[![ru](https://img.shields.io/badge/lang-ru-blue.svg)](https://github.com/dogee4803/siteva_next.js/blob/main/README.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/dogee4803/siteva_next.js/blob/main/README.en.md)
 ## Запуск проекта
 
 Запуск сервера разработки:
