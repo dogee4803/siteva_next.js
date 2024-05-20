@@ -1,8 +1,7 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Сайт на Next.js для системы виртуальных ассистентов
+## Запуск проекта
 
-## Getting Started
-
-First, run the development server:
+Запуск сервера разработки:
 
 ```bash
 npm run dev
@@ -14,23 +13,49 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Сайт запускатеся по данному адресу:http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Стартовая страница `app/page.tsx`. Остальные в папке `app/pages/<путь к нужной странице>/page.tsx`.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
+## Документация
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Get started with Prisma](https://www.prisma.io/docs/getting-started) - документация на ORM Prisma для работы с БД
+- [NextAuth.js](https://next-auth.js.org/) - документация для NextAuth.js. Планируется реализация входа через Яндекс, Гугл, Гитхаб через него. Также сделать для Сбера через кастом.
+- [MUI: The React components](https://mui.com) - библиотека компонентов для React.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Подключение к существующей БД на PostgreSQL
 
-## Deploy on Vercel
+Более подробно здесь: https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project/relational-databases-typescript-postgresql
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1) cd <ДИРЕКТОРИЯ_ПРОЕКТА>
+2) Установка ORM
+   ```
+   npm install prisma --save-dev 
+   ```
+3) Создание файла .env для хранения переменных окружения (в данном случае адреса БД) и создание папки prisma с файлом schema.prisma в ней.
+   ```
+   npx prisma init
+   ```
+4) В файле .env подставить в переменную нужное значение DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public".
+5) Создание моделей в shema.prisma
+   ```
+   npx prisma db pull
+   ```
+6) Создание первой миграции
+   ```
+   mkdir -p prisma/migrations/0_init
+   npx prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script > prisma/migrations/0_init/migration.sql
+   npx prisma migrate resolve --applied 0_init
+   ```
+7) Установка клиента Prisma
+   По идее нужно только сгенерировать клиента т.к. призма установлена в проекте по умолчанию.
+   ```
+   npm install @prisma/client
+   npx prisma generate
+   ```
+8) Вроде всё.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
