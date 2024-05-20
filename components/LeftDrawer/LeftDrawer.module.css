@@ -1,0 +1,23 @@
+
+.LeftDrawerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: (255, 255, 255);
+}
+
+.LeftDrawerList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+.Link {
+    text-decoration: none;
+}
+  
+
+  

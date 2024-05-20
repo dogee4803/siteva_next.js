@@ -1,0 +1,36 @@
+
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.Link {
+    text-decoration: none;
+}
+.logo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+}
+.site_title {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    font-family: Noto Sans;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 41px;
+    letter-spacing: 0%;
+    text-align: left;
+}
+.logo_image {
+    width: 70px;
+    height: 70px;
+    left: 15px;
+    top: 33px;
+    filter: brightness(0) saturate(100%) invert(100%) sepia(91%) saturate(38%) hue-rotate(254deg) brightness(110%) contrast(110%);
+} 
+.auth_button {
+    color: rgb(255, 255, 255);
+    font-size: 15px;
+}
