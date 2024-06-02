@@ -7,6 +7,7 @@ import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
 import GoogleSignInButton from '../GoogleSignInButton';
 import { useRouter } from 'next/navigation';
 
+
 const FormSchema = z
   .object({
     username: z.string().min(1, 'Username is required').max(100),
@@ -16,6 +17,8 @@ const FormSchema = z
       .min(1, 'Password is required')
       .min(8, 'Password must have than 8 characters'),
     confirmPassword: z.string().min(1, 'Password confirmation is required'),
+    registrationdate: z.date(),
+    lastlogindate: z.date()
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
@@ -31,12 +34,15 @@ const SignUpForm = () => {
       email: '',
       password: '',
       confirmPassword: '',
+      registrationdate: new Date(),
+      lastlogindate: new Date()
     },
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     console.log(values);
     try {
+      const currentTimestamp = Date.now();
       const response = await fetch('/api/user', {
         method: 'POST',
         headers: {
@@ -44,8 +50,10 @@ const SignUpForm = () => {
         },
         body: JSON.stringify({
           username: values.username,
-          email: values.email,
-          password: values.password
+          email: values.email.toLowerCase(),
+          password: values.password,
+          registrationdate: new Date(currentTimestamp),
+          lastlogindate: new Date(currentTimestamp),
         })
       })
 
@@ -141,3 +149,4 @@ const SignUpForm = () => {
 };
 
 export default SignUpForm;
+

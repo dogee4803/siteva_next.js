@@ -7,6 +7,9 @@ import { LeftDrawer } from "../LeftDrawer/LeftDrawer";
 import Link from "next/link";
 import Button from "@mui/material/Button";
 import styles from "./Header.module.css";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import { IconButton } from "@mui/material";
+
 
 export const Header = () => {
   return (
@@ -24,7 +27,7 @@ export const Header = () => {
                   height={50}
                   className={styles.logo_image}
                 />
-                <h1 className={styles.site_title}>Виртуальные Ассистенты</h1>
+                <h1 className={styles.site_title}>Цифровой медецинский и ВА помощник</h1>
               </div>
             </Link>
           </div>

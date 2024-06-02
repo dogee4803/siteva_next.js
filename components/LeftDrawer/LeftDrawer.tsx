@@ -65,7 +65,7 @@ export const LeftDrawer = () => {
                   <ListItemIcon>
                     <LocalHospitalIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Профиль здоровья" />
+                  <Link className={styles.Link} href="/pages/med_profile">Профиль здоровья</Link>
                 </ListItemButton>
               </ListItem>
               <ListItem>
