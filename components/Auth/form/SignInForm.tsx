@@ -4,7 +4,13 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Box, Button, Grid, Link, Typography, TextField } from '@mui/material';
-import GoogleSignInButton from '../GoogleSignInButton';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import styles from "../SignXXForm.module.css";
+import GitHubSignInButton from '../GitHubButton';
+import VKSignInButton from '../VKButton'
+import Alert from '@mui/material/Alert';
+import { useState } from 'react';
 
 const FormSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email'),
@@ -15,6 +21,8 @@ const FormSchema = z.object({
 });
 
 const SignInForm = () => {
+  const [error, setError] = useState('');
+  const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -23,8 +31,20 @@ const SignInForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof FormSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    const signInData = await signIn('credentials',  {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    });
+
+    if (signInData?.error) {
+      console.log(signInData.error);
+      setError("Пароль или почта указаны не верно!");
+    }
+    else {
+      router.push('/pages/profile')
+    }
   };
 
   return (
@@ -49,8 +69,8 @@ const SignInForm = () => {
         <Grid container direction="column" spacing={1}>
           <Grid item>
             <TextField
-              label="Email"
-              placeholder="mail@example.com"
+              label="Эл. почта"
+              placeholder="pochta@example.com"
               {...form.register('email')}
               error={!!form.formState.errors.email}
               helperText={form.formState.errors.email?.message}
@@ -59,27 +79,33 @@ const SignInForm = () => {
           <Grid item>
             <TextField
               type="password"
-              label="Password"
-              placeholder="Enter your password"
+              label="Пароль"
+              placeholder="Введите ваш пароль"
               {...form.register('password')}
               error={!!form.formState.errors.password}
               helperText={form.formState.errors.password?.message}
             />
           </Grid>
         </Grid>
-        <Button variant="contained" type="submit" fullWidth sx={{ mt: 3 }}>
-          Sign in
+          {error && (
+            <Alert severity="error" sx={{ mt: 3, my: 3 }}>
+              {error}
+            </Alert>
+          )}
+        <Button className={styles.signButton} type="submit" fullWidth sx={{ mt: 3 }}>
+          Войти
         </Button>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', my: 3 }}>
-          <Box sx={{ flexGrow: 1, bgcolor: 'divider', height: 1 }} />
-          <Typography sx={{ px: 2, color: 'text.secondary' }}>or</Typography>
-          <Box sx={{ flexGrow: 1, bgcolor: 'divider', height: 1 }} />
+          <Box sx={{ flexGrow: 1, bgcolor: 'divider', height: 2 }} />
+          <Typography sx={{ px: 2, color: 'text.secondary' }}>или</Typography>
+          <Box sx={{ flexGrow: 1, bgcolor: 'divider', height: 2 }} />
         </Box>
-        <GoogleSignInButton>Sign in with Google</GoogleSignInButton>
+        <GitHubSignInButton/>
+        <VKSignInButton />
         <Typography variant="body2" align="center" color="text.secondary" sx={{ mt: 2 }}>
-          If you don&apos;t have an account, please&nbsp;
+          Если у вас нет аккаунта, пожалуйста,&nbsp;
           <Link href="/sign-up" color="primary" underline="hover">
-            Sign up
+            зарегистрируйтесь
           </Link>
         </Typography>
       </Box>

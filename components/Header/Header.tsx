@@ -9,16 +9,21 @@ import Button from "@mui/material/Button";
 import styles from "./Header.module.css";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { IconButton } from "@mui/material";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import SignOutButton from "./SignOutButton";
 
 
-export const Header = () => {
+export const Header = async () => {
+  const session = await getServerSession(authOptions);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ backgroundColor: "#7653fc" }}>
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <div className={styles.headerContainer}>
             <LeftDrawer />
-            <Link className={styles.Link}href="/">
+            <Link className={styles.Link}href="/pages/home">
               <div className={styles.logo}>
                 <Image
                   src="/squirrel.svg"
@@ -31,11 +36,18 @@ export const Header = () => {
               </div>
             </Link>
           </div>
-          <Link href="/sign-in">
-            <Button variant="text" className={styles.auth_button}>
-              Sign in
-            </Button>
-          </Link>
+          {session?.user ? (
+            <>
+              <div> Signed in as {session.user.email} </div>
+              <SignOutButton />
+            </>
+          ) : (
+            <Link href="/sign-in">
+              <Button variant="text" className={styles.auth_button}>
+                Sign in
+              </Button>
+            </Link>
+          )}
         </Toolbar>
       </AppBar>
     </Box>

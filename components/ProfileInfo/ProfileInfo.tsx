@@ -8,6 +8,7 @@ interface ProfileInfoProps {
   registrationDate: string;
   height: string;
   age: string;
+  image: string;
 }
 
 export const ProfileInfo: React.FC<ProfileInfoProps> = ({
@@ -16,11 +17,21 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
   registrationDate,
   height,
   age,
+  image,
 }) => {
+  const formattedRegistrationDate = new Date(registrationDate).toLocaleDateString('ru-RU', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+
   return (
     <Box sx={{ padding: 2, border: "1px solid #ccc", borderRadius: 4 }}>
-      <AvatarIcon username={name}/>
+      
       <Typography variant="h5" gutterBottom>Профиль пользователя</Typography>
+      <Box sx={{ marginBottom: 1 }}>
+        <AvatarIcon name={name} photo = {image} />
+      </Box>
       <Box sx={{ marginBottom: 1 }}>
         <Typography variant="subtitle1"><strong>Имя:</strong> {name}</Typography>
       </Box>
@@ -28,7 +39,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         <Typography variant="subtitle1"><strong>Email:</strong> {email}</Typography>
       </Box>
       <Box sx={{ marginBottom: 1 }}>
-        <Typography variant="subtitle1"><strong>Дата регистрации:</strong> {registrationDate}</Typography>
+        <Typography variant="subtitle1"><strong>Дата регистрации:</strong> {formattedRegistrationDate}</Typography>
       </Box>
       <Box sx={{ marginBottom: 1 }}>
         <Typography variant="subtitle1"><strong>Рост:</strong> {height}</Typography>

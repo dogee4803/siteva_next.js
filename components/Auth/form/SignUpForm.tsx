@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
-import GoogleSignInButton from '../GoogleSignInButton';
 import { useRouter } from 'next/navigation';
+import styles from "../SignXXForm.module.css";
 
 
 const FormSchema = z
@@ -60,6 +60,7 @@ const SignUpForm = () => {
       if (response.ok) {
         console.log('Form submitted successfully');
         console.log(response)
+        router.push('/sign-in')
       } else {
         console.error('Error submitting form');
         console.log(response)
@@ -91,8 +92,8 @@ const SignUpForm = () => {
         <Grid container direction="column" spacing={2}>
           <Grid item>
             <TextField
-              label="Username"
-              placeholder="Имя пользователя"
+              label="Имя пользователя"
+              placeholder="Иван"
               {...form.register('username')}
               error={!!form.formState.errors.username}
               helperText={form.formState.errors.username?.message}
@@ -100,8 +101,8 @@ const SignUpForm = () => {
           </Grid>
           <Grid item>
             <TextField
-              label="Email"
-              placeholder="mail@example.com"
+              label="Эл. почта"
+              placeholder="pochta@example.com"
               {...form.register('email')}
               error={!!form.formState.errors.email}
               helperText={form.formState.errors.email?.message}
@@ -110,8 +111,8 @@ const SignUpForm = () => {
           <Grid item>
             <TextField
               type="password"
-              label="Password"
-              placeholder="Enter your password"
+              label="Пароль"
+              placeholder="Введите ваш пароль"
               {...form.register('password')}
               error={!!form.formState.errors.password}
               helperText={form.formState.errors.password?.message}
@@ -120,27 +121,26 @@ const SignUpForm = () => {
           <Grid item>
             <TextField
               type="password"
-              label="Re-Enter your password"
-              placeholder="Re-Enter your password"
+              label="Подтвердите ваш пароль"
+              placeholder="Подтвердите ваш пароль"
               {...form.register('confirmPassword')}
               error={!!form.formState.errors.confirmPassword}
               helperText={form.formState.errors.confirmPassword?.message}
             />
           </Grid>
         </Grid>
-        <Button variant="contained" type="submit" fullWidth sx={{ mt: 3 }}>
-          Sign up
+        <Button className={styles.signButton} type="submit" fullWidth sx={{ mt: 3 }}>
+          Зарегистрироваться
         </Button>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', my: 3 }}>
-          <Box sx={{ flexGrow: 1, bgcolor: 'divider', height: 1 }} />
-          <Typography sx={{ px: 2, color: 'text.secondary' }}>or</Typography>
-          <Box sx={{ flexGrow: 1, bgcolor: 'divider', height: 1 }} />
+          <Box sx={{ flexGrow: 1, bgcolor: 'divider', height: 2 }} />
+          <Typography sx={{ px: 2, color: 'text.secondary' }}>или</Typography>
+          <Box sx={{ flexGrow: 1, bgcolor: 'divider', height: 2 }} />
         </Box>
-        <GoogleSignInButton>Sign up with Google</GoogleSignInButton>
         <Typography variant="body2" align="center" color="text.secondary" sx={{ mt: 2 }}>
-          If you don't have an account, please&nbsp;
+          Если у вас есть аккаунт, пожалуйста,&nbsp;
           <Link href="/sign-in" color="primary" underline="hover">
-            Sign in
+            войдите
           </Link>
         </Typography>
       </Box>
@@ -149,4 +149,3 @@ const SignUpForm = () => {
 };
 
 export default SignUpForm;
-

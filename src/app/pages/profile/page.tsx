@@ -1,19 +1,27 @@
 import { Header } from "../../../../components/Header/Header"
 import React from "react";
 import { ProfileInfo } from "../../../../components/ProfileInfo/ProfileInfo";
+import { getServerSession } from "next-auth";
+import { authOptions, loginIsRequiredServer } from "@/lib/auth";
 
-export default function Home(): JSX.Element {
+const page = async () => {
+  await loginIsRequiredServer();
+  const session = await getServerSession(authOptions);
+  console.log(session);
 
   return (
     <div className="body">
       <Header />
       <ProfileInfo
-          name="Чёрный Плащ"
-          email="darkwing@duck.com"
-          registrationDate="29 февраля 2023"
+          name={session?.user!.name!}
+          email={session?.user!.email!}
+          registrationDate={session?.user!.registrationdate!}
           height="154 см"
           age="32 лет"
+          image={session?.user?.image!}
         />
     </div>
   );
 }
+
+export default page

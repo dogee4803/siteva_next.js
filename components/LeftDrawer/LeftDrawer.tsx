@@ -13,23 +13,12 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
-import SignInForm from "../Auth/form/SignInForm";
-import SignUpForm from "../Auth/form/SignUpForm";
 import { useState } from "react";
 import styles from "./LeftDrawer.module.css";
 import Link from "next/link";
 
 export const LeftDrawer = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isLoginFormOpen, setIsLoginFormOpen] = useState(false);
-
-  const openLoginForm = () => {
-    setIsLoginFormOpen(true);
-  };
-
-  const closeLoginForm = () => {
-    setIsLoginFormOpen(false);
-  };
 
   return (
     <>
@@ -88,8 +77,6 @@ export const LeftDrawer = () => {
           </nav>
         </Box>
       </Drawer>
-
-      {isLoginFormOpen && <SignUpForm />}
     </>
   );
 };
