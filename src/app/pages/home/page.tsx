@@ -1,5 +1,5 @@
-import { Header } from "../../../components/Header/Header"
-import { TabsNavBar } from "../../../components/TabsNavBar/TabsNavBar";
+import { Header } from "@/components/Header/Header"
+import { TabsNavBar } from "@/components/TabsNavBar/TabsNavBar";
 import React from "react";
 
 const page = async () => {

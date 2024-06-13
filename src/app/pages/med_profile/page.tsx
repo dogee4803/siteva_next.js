@@ -1,7 +1,7 @@
-import { Header } from "../../../components/Header/Header";
+import { Header } from "@/components/Header/Header";
 import React from "react";
-import FitnessTable from "../../../components/FitnessTable/FitnessTable";
-import { ProfileInfo } from "../../../components/ProfileInfo/ProfileInfo";
+import FitnessTable from "@/components/FitnessTable/FitnessTable";
+import { ProfileInfo } from "@/components/ProfileInfo/ProfileInfo";
 import { Grid, Box } from "@mui/material";
 import { auth } from "../../../../auth";
 

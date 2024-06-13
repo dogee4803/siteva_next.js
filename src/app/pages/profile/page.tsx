@@ -1,6 +1,6 @@
-import { Header } from "../../../components/Header/Header"
+import { Header } from "@/components/Header/Header"
 import React from "react";
-import { ProfileInfo } from "../../../components/ProfileInfo/ProfileInfo";
+import { ProfileInfo } from "@/components/ProfileInfo/ProfileInfo";
 import { auth } from "../../../../auth";
 
 const page = async () => {

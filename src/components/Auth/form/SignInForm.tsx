@@ -10,8 +10,8 @@ import Alert from '@mui/material/Alert';
 import { startTransition, useState } from 'react';
 import { SignInSchema } from '@/lib/schemas/signIn-schema';
 import { DEFAULT_LOGINREDIRECT } from '../../../../routes';
-import login from '../login';
-import OAuthButton from '../OAuthButton';
+import login from '@/components/Auth/login';
+import OAuthButton from '@/components/Auth/OAuthButton';
 
 const SignInForm = () => {
   const [myError, setMyError] = useState('');
