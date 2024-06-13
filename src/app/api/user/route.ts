@@ -1,39 +1,34 @@
 import { NextResponse } from "next/server";
 import db from "@/lib/db";
-import { hash } from 'bcrypt'
+import { hash } from 'bcryptjs'
+import { getUserByEmail } from "@/data/user";
 
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { username, email, password, registrationdate, lastlogindate } = body;
+        const { name, email, password } = body;
 
-        const existingUserByEmail = await db.users.findFirst({
-            where: { email: { equals: email }}
-        });
+        const existingUserByEmail = await getUserByEmail(email);
+
         if (existingUserByEmail) {
-            return NextResponse.json({ user: null, message: "User with this email already exists." }, { status: 409 });
+            return NextResponse.json({ user: null, message: "User with this email already exists." }, { status: 408 });
         }
 
-        const existingUserByUsername = await db.users.findFirst({
-            where: { username: { equals: username } }
+        const existingUserByUsername = await db.user.findFirst({
+            where: { name: { equals: name } }
         });
         if (existingUserByUsername) {
-            return NextResponse.json({ user: null, message: "User with this username already exists." }, { status: 409 });
+            return NextResponse.json({ user: null, message: "User with this name already exists." }, { status: 409 });
         }
 
         const hashedPassword = await hash(password, 10);
 
-        const formattedRegistrationDate = new Date(registrationdate).toISOString();
-        const formattedLastLoginDate = new Date(lastlogindate).toISOString();
-
         try {
-            const newUser = await db.users.create({
+            const newUser = await db.user.create({
                 data: {
-                    username,
+                    name,
                     email,
                     password: hashedPassword,
-                    registrationdate: formattedRegistrationDate,
-                    lastlogindate: formattedLastLoginDate
                 }
             });
             const { password: newUserPassword, ...rest } = newUser;
@@ -47,7 +42,7 @@ export async function POST(req: Request) {
                     return NextResponse.json({ message: 'Validation errors:', errors: validationErrors }, { status: 400 });
                 } else {
                     // Handle other errors
-                    return NextResponse.json({ message: `Something went wrong: ${error.message}` }, { status: 500 });
+                    return NextResponse.json({ message: `Something went wrong during creating user in db: ${error.message}` }, { status: 500 });
                 }
             } else {
                 // Handle unknown errors
@@ -56,6 +51,6 @@ export async function POST(req: Request) {
         }
     } catch (error) {
         console.error(error);
-        return NextResponse.json({ message: "Something went wrong123!" }, { status: 500 });
+        return NextResponse.json({ message: "Something unknown went wrong!" }, { status: 500 });
     }
 }

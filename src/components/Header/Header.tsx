@@ -7,15 +7,14 @@ import { LeftDrawer } from "../LeftDrawer/LeftDrawer";
 import Link from "next/link";
 import Button from "@mui/material/Button";
 import styles from "./Header.module.css";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import { IconButton } from "@mui/material";
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
 import SignOutButton from "./SignOutButton";
+import ThemeButton from "./ChangeThemeButton";
+import { auth } from "../../../auth"
+//import NextAuth from "next-auth"
 
 
 export const Header = async () => {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -36,6 +35,7 @@ export const Header = async () => {
               </div>
             </Link>
           </div>
+          <ThemeButton />
           {session?.user ? (
             <>
               <div> Signed in as {session.user.email} </div>

@@ -1,49 +1,42 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Button, Grid, Link, Typography, TextField } from '@mui/material';
-import { signIn } from 'next-auth/react';
+import { signIn } from '../../../../auth';
 import { useRouter } from 'next/navigation';
 import styles from "../SignXXForm.module.css";
 import GitHubSignInButton from '../GitHubButton';
 import VKSignInButton from '../VKButton'
 import Alert from '@mui/material/Alert';
 import { useState } from 'react';
-
-const FormSchema = z.object({
-  email: z.string().min(1, 'Email is required').email('Invalid email'),
-  password: z
-    .string()
-    .min(1, 'Password is required')
-    .min(8, 'Password must have than 8 characters'),
-});
+import { SignInSchema } from '@/lib/schemas/signIn-schema';
+import { DEFAULT_LOGINREDIRECT } from '../../../../routes';
+import login from '../login';
 
 const SignInForm = () => {
   const [error, setError] = useState('');
   const router = useRouter();
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof SignInSchema>>({
+    resolver: zodResolver(SignInSchema),
     defaultValues: {
       email: '',
       password: '',
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    const signInData = await signIn('credentials',  {
-      email: values.email,
-      password: values.password,
-      redirect: false,
-    });
-
-    if (signInData?.error) {
-      console.log(signInData.error);
-      setError("Пароль или почта указаны не верно!");
-    }
-    else {
-      router.push('/pages/profile')
+  const onSubmit = async (values: z.infer<typeof SignInSchema>) => {
+    try {
+      await login(values);
+      // Дополнительные действия после успешного входа
+      router.push(DEFAULT_LOGINREDIRECT);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('Произошла неизвестная ошибка');
+      }
     }
   };
 

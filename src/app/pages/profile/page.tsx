@@ -1,12 +1,10 @@
-import { Header } from "../../../../components/Header/Header"
+import { Header } from "../../../components/Header/Header"
 import React from "react";
-import { ProfileInfo } from "../../../../components/ProfileInfo/ProfileInfo";
-import { getServerSession } from "next-auth";
-import { authOptions, loginIsRequiredServer } from "@/lib/auth";
+import { ProfileInfo } from "../../../components/ProfileInfo/ProfileInfo";
+import { auth } from "../../../../auth";
 
 const page = async () => {
-  await loginIsRequiredServer();
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   console.log(session);
 
   return (

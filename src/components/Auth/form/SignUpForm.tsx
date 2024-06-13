@@ -6,40 +6,24 @@ import * as z from 'zod';
 import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import styles from "../SignXXForm.module.css";
-
-
-const FormSchema = z
-  .object({
-    username: z.string().min(1, 'Username is required').max(100),
-    email: z.string().min(1, 'Email is required').email('Invalid email'),
-    password: z
-      .string()
-      .min(1, 'Password is required')
-      .min(8, 'Password must have than 8 characters'),
-    confirmPassword: z.string().min(1, 'Password confirmation is required'),
-    registrationdate: z.date(),
-    lastlogindate: z.date()
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmPassword'],
-    message: 'Password do not match',
-  });
+import { SignUpSchema } from '@/lib/schemas/signUp-schema';
+import Alert from '@mui/material/Alert';
+import { useState } from 'react';
 
 const SignUpForm = () => {
+  const [error, setError] = useState('');
   const router = useRouter();
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof SignUpSchema>>({
+    resolver: zodResolver(SignUpSchema),
     defaultValues: {
-      username: '',
+      name: '',
       email: '',
       password: '',
       confirmPassword: '',
-      registrationdate: new Date(),
-      lastlogindate: new Date()
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+  const onSubmit = async (values: z.infer<typeof SignUpSchema>) => {
     console.log(values);
     try {
       const currentTimestamp = Date.now();
@@ -49,20 +33,28 @@ const SignUpForm = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: values.username,
+          name: values.name,
           email: values.email.toLowerCase(),
           password: values.password,
-          registrationdate: new Date(currentTimestamp),
-          lastlogindate: new Date(currentTimestamp),
         })
       })
 
       if (response.ok) {
         console.log('Form submitted successfully');
-        console.log(response)
+        console.log(response) 
         router.push('/sign-in')
       } else {
         console.error('Error submitting form');
+        const status = response.status;
+        if (status === 408) {
+          setError("Данная почта уже зарегестрирована!");
+        }
+        else if (status === 409) {
+          setError("Данное имя уже занято!");
+        } 
+        else {
+          setError("Неизвестная ошибка!");
+        }
         console.log(response)
       }
     } catch (error) {
@@ -94,9 +86,9 @@ const SignUpForm = () => {
             <TextField
               label="Имя пользователя"
               placeholder="Иван"
-              {...form.register('username')}
-              error={!!form.formState.errors.username}
-              helperText={form.formState.errors.username?.message}
+              {...form.register('name')}
+              error={!!form.formState.errors.name}
+              helperText={form.formState.errors.name?.message}
             />
           </Grid>
           <Grid item>
@@ -137,6 +129,11 @@ const SignUpForm = () => {
           <Typography sx={{ px: 2, color: 'text.secondary' }}>или</Typography>
           <Box sx={{ flexGrow: 1, bgcolor: 'divider', height: 2 }} />
         </Box>
+        {error && (
+          <Alert severity="error" sx={{ mt: 3, my: 3 }}>
+            {error}
+          </Alert>
+        )}
         <Typography variant="body2" align="center" color="text.secondary" sx={{ mt: 2 }}>
           Если у вас есть аккаунт, пожалуйста,&nbsp;
           <Link href="/sign-in" color="primary" underline="hover">

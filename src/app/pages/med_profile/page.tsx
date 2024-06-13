@@ -1,22 +1,20 @@
-import { Header } from "../../../../components/Header/Header";
+import { Header } from "../../../components/Header/Header";
 import React from "react";
-import FitnessTable from "../../../../components/FitnessTable/FitnessTable";
-import { ProfileInfo } from "../../../../components/ProfileInfo/ProfileInfo";
-import { getServerSession } from "next-auth";
-import { authOptions, loginIsRequiredServer } from "@/lib/auth";
+import FitnessTable from "../../../components/FitnessTable/FitnessTable";
+import { ProfileInfo } from "../../../components/ProfileInfo/ProfileInfo";
 import { Grid, Box } from "@mui/material";
+import { auth } from "../../../../auth";
 
 const page = async () => {
-  await loginIsRequiredServer();
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   return (
     <div className="body">
       <Header />
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} sm={8} md={6}>
           <ProfileInfo
-            name={session?.user.username!}
-            email={session?.user.email!}
+            name={session?.user!.name!}
+            email={session?.user!.email!}
             registrationDate={session?.user!.registrationdate!}
             height="180 см"
             age="35 лет"
