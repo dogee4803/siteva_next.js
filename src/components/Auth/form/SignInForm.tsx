@@ -121,7 +121,6 @@ const SignInForm = () => {
         <OAuthButton icon='/github-mark-white.svg' icon_alt='GitHub Icon' text='Продолжить через GitHub' provider='github'/>
         <OAuthButton icon='/VK Logo.svg' icon_alt='VK Icon' text='Продолжить через VK' provider='vk'/>
         <OAuthButton icon='/Yandex_icon.svg' icon_alt='yandex Icon' text='Продолжить через Яндекс' provider='yandex'/>
-        <OAuthButton icon='/' icon_alt='' text='' provider=''/>
         <Typography variant="body2" align="center" color="text.secondary" sx={{ mt: 2 }}>
           Если у вас нет аккаунта, пожалуйста,&nbsp;
           <Link href="/sign-up" color="primary" underline="hover">
