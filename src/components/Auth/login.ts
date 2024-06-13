@@ -4,6 +4,8 @@ import { SignInSchema } from "@/lib/schemas/signIn-schema";
 import * as z from "zod";
 import { signIn } from '../../../auth';
 import { AuthError } from "next-auth";
+import { generateVerificationToken } from "@/lib/tokens";
+import { getUserByEmail } from "@/lib/user";
 
 
 const login = async (values: z.infer<typeof SignInSchema>) => {
@@ -14,6 +16,19 @@ const login = async (values: z.infer<typeof SignInSchema>) => {
     }
   
     const { email, password } = validatedFields.data;
+
+    const existingUser = await getUserByEmail(email);
+
+    if (!existingUser || !existingUser.email || !existingUser.password){
+      return { error: "Email does not exist!"}
+    }
+
+    if (!existingUser.emailVerified) {
+      const verificationToken = await generateVerificationToken(existingUser.email)
+      
+      return { success: "Confirmation email sent!"};
+    }
+
     try {
       const signInData = await signIn("credentials", {
         email,

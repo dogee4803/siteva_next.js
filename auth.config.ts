@@ -6,7 +6,7 @@ import Credentials from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
 
 import { SignInSchema } from "@/lib/schemas/signIn-schema";
-import { getUserByEmail } from "@/data/user";
+import { getUserByEmail } from "@/lib/user";
 import { compare } from "bcryptjs";
 
 

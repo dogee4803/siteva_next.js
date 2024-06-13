@@ -1,22 +1,21 @@
-'use client';
+'use client'
 
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Button, Grid, Link, Typography, TextField } from '@mui/material';
-import { signIn } from '../../../../auth';
 import { useRouter } from 'next/navigation';
 import styles from "../SignXXForm.module.css";
 import Alert from '@mui/material/Alert';
-import { useState } from 'react';
+import { startTransition, useState } from 'react';
 import { SignInSchema } from '@/lib/schemas/signIn-schema';
 import { DEFAULT_LOGINREDIRECT } from '../../../../routes';
 import login from '../login';
-import { AuthError } from 'next-auth';
 import OAuthButton from '../OAuthButton';
 
 const SignInForm = () => {
   const [myError, setMyError] = useState('');
+  const [mySuccess, setMySuccess] = useState('');
   const router = useRouter();
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
@@ -27,15 +26,19 @@ const SignInForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof SignInSchema>) => {
-    const signInData = await login(values);
-    if (signInData?.error) {
-      console.log(signInData.error);
-      setMyError("Пароль или почта указаны не верно!");
-    }
-    else {
-      router.push(DEFAULT_LOGINREDIRECT)
-    }
-  }
+    startTransition(() => {
+      login(values)
+        .then((data) => {
+          if (data.error) {
+            setMyError("Пароль или почта указаны не верно!");
+          }
+          if (data.success) {
+            setMySuccess("Подтверждение почты отправлено!");
+          }
+        });
+    });
+    router.push(DEFAULT_LOGINREDIRECT);
+  };
 
   return (
     <Box
@@ -46,8 +49,7 @@ const SignInForm = () => {
         minHeight: '100vh',
       }}
     >
-      <Box component="form" onSubmit={form.handleSubmit(onSubmit)} 
-      sx={{
+      <Box component="form" onSubmit={form.handleSubmit(onSubmit)} sx={{
           width: '100%',
           minWidth: 300,
           maxWidth: 400,
@@ -77,11 +79,16 @@ const SignInForm = () => {
             />
           </Grid>
         </Grid>
-          {myError && (
-            <Alert severity="error" sx={{ mt: 3, my: 3 }}>
-              {myError}
-            </Alert>
-          )}
+        {myError && (
+          <Alert severity="error" sx={{ mt: 3, my: 3 }}>
+            {myError}
+          </Alert>
+        )}
+        {mySuccess && (
+          <Alert severity="success" sx={{ mt: 3, my: 3 }}>
+            {mySuccess}
+          </Alert>
+        )}
         <Button className={styles.signButton} type="submit" fullWidth sx={{ mt: 3 }}>
           Войти
         </Button>

@@ -2,7 +2,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth"
 import db from "@/lib/db"
 import authConfig from "./auth.config";
-import { getUserById } from "@/data/user";
+import { getUserById } from "@/lib/user";
 
 
 export const { 
@@ -11,7 +11,29 @@ export const {
   signIn,
   signOut,
  } = NextAuth ({
+  pages: {
+    signIn: "/sign-in"
+  },
+  events: {
+    async linkAccount({user}) {
+      await db.user.update({
+        where: {id: user.id},
+        data: {emailVerified: new Date()}
+      })
+    }
+  },
   callbacks: {
+    async signIn({ user, account }) {
+      //Allow OAuth without email verification
+      if (account?.provider !== "credentials") return true;
+
+      const existingUser = await getUserById(user.id);
+
+      // Prevent sign-in without email verification
+      if (!existingUser?.emailVerified) return false;
+
+      return true;
+    },
     async session({token, session}) {
       console.log({
         sessionToken: token, session
@@ -31,7 +53,6 @@ export const {
       const existingUser = await getUserById(token.sub);
 
       if (!existingUser) return token;
-      token.user = existingUser;
       token.createdAt = existingUser.createdAt;
       return token;
     }

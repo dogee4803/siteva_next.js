@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import db from "@/lib/db";
 import { hash } from 'bcryptjs'
-import { getUserByEmail } from "@/data/user";
+import { getUserByEmail } from "@/lib/user";
+import { generateVerificationToken } from "@/lib/tokens";
 
 export async function POST(req: Request) {
     try {
@@ -31,8 +32,11 @@ export async function POST(req: Request) {
                     password: hashedPassword,
                 }
             });
+
+            const verificationToken = await generateVerificationToken(email);
+
             const { password: newUserPassword, ...rest } = newUser;
-            return NextResponse.json({ user: rest, message: "User created successfully" }, { status: 201 });
+            return NextResponse.json({ user: rest, message: "Confirmation email sent" }, { status: 201 });
         }  catch (error) {
             if (error instanceof Error) {
                 console.error('Error creating user:', error);
