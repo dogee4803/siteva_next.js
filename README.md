@@ -3,6 +3,12 @@
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/dogee4803/siteva_next.js/blob/main/README.en.md)
 ## Запуск проекта
 
+Установка Next.js:
+
+```
+npm install next
+```
+
 Запуск сервера разработки:
 
 ```bash
@@ -24,7 +30,7 @@ bun dev
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 - [Get started with Prisma](https://www.prisma.io/docs/getting-started) - документация на ORM Prisma для работы с БД
-- [NextAuth.js](https://next-auth.js.org/) - документация для NextAuth.js. Планируется реализация входа через Яндекс, Гугл, Гитхаб через него. Также сделать для Сбера через кастом.
+- [Auth.js](https://authjs.dev/) - документация для Auth.js. Реализована авторизация через VK, GitHub, Yandex.
 - [MUI: The React components](https://mui.com) - библиотека компонентов для React.
 
 ## Подключение к существующей БД на PostgreSQL
@@ -57,7 +63,6 @@ bun dev
    npm install @prisma/client
    npx prisma generate
    ```
-8) Вроде всё.
 
 
 
