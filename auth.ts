@@ -3,6 +3,8 @@ import NextAuth from "next-auth"
 import db from "@/lib/db"
 import authConfig from "./auth.config";
 import { getUserById } from "@/lib/user";
+import { getTwoFactorConfirmationByUserId } from "@/lib/two-factor-confirmation";
+
 
 
 export const { 
@@ -32,6 +34,17 @@ export const {
       // Prevent sign-in without email verification
       if (!existingUser?.emailVerified) return false;
 
+      // 2FA check
+      if (existingUser.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id);
+        
+        if (!twoFactorConfirmation) return false;
+
+        await db.twoFactorConfirmation.delete({
+          where: {id: twoFactorConfirmation.id}
+        });
+      }
+
       return true;
     },
     async session({token, session}) {
@@ -42,6 +55,7 @@ export const {
       if (token.sub && session.user) {
         session.user.id = token.sub;
         session.user.createdAt = token.createdAt;
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled;
       }
       
       return session
@@ -54,6 +68,7 @@ export const {
 
       if (!existingUser) return token;
       token.createdAt = existingUser.createdAt;
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
       return token;
     }
   },

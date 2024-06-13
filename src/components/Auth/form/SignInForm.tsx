@@ -14,6 +14,7 @@ import login from '@/components/Auth/login';
 import OAuthButton from '@/components/Auth/OAuthButton';
 
 const SignInForm = () => {
+  const [showTwoFactor, setShowTwoFactor] = useState(false);
   const [myError, setMyError] = useState('');
   const [mySuccess, setMySuccess] = useState('');
   const router = useRouter();
@@ -22,6 +23,7 @@ const SignInForm = () => {
     defaultValues: {
       email: '',
       password: '',
+      code: '',
     },
   });
 
@@ -29,13 +31,17 @@ const SignInForm = () => {
     startTransition(() => {
       login(values)
         .then((data) => {
-          if (data.error) {
+          if (data?.error) {
             setMyError("Пароль или почта указаны не верно!");
           }
-          if (data.success) {
+          if (data?.success) {
             setMySuccess("Подтверждение почты отправлено!");
           }
-        });
+          if (data?.twoFactor) {
+            setShowTwoFactor(true);
+          }
+        })
+        .catch(() => setMyError("Что-то пошло не так!"));
     });
     router.push(DEFAULT_LOGINREDIRECT);
   };
@@ -58,27 +64,42 @@ const SignInForm = () => {
           borderRadius: 2,
           textAlign: 'center',
         }}>
-        <Grid container direction="column" spacing={1}>
+        {showTwoFactor && (
+          <Grid container direction="column" spacing={1}>
           <Grid item>
             <TextField
-              label="Эл. почта"
-              placeholder="pochta@example.com"
-              {...form.register('email')}
+              label="2FA Код"
+              placeholder="123456"
+              {...form.register('code')}
               error={!!form.formState.errors.email}
               helperText={form.formState.errors.email?.message}
             />
           </Grid>
-          <Grid item>
-            <TextField
+        </Grid>
+        )}
+        {!showTwoFactor && (
+          <Grid container direction="column" spacing={1}>
+            <Grid item>
+              <TextField
+                label="Эл. почта"
+                placeholder="pochta@example.com"
+                {...form.register('email')}
+                error={!!form.formState.errors.email}
+                helperText={form.formState.errors.email?.message}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
               type="password"
               label="Пароль"
               placeholder="Введите ваш пароль"
               {...form.register('password')}
               error={!!form.formState.errors.password}
               helperText={form.formState.errors.password?.message}
-            />
+              />
+            </Grid>
           </Grid>
-        </Grid>
+        )}
         {myError && (
           <Alert severity="error" sx={{ mt: 3, my: 3 }}>
             {myError}
@@ -90,7 +111,7 @@ const SignInForm = () => {
           </Alert>
         )}
         <Button className={styles.signButton} type="submit" fullWidth sx={{ mt: 3 }}>
-          Войти
+          {showTwoFactor ? "Ввести код" : "Войти"}
         </Button>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', my: 3 }}>
           <Box sx={{ flexGrow: 1, bgcolor: 'divider', height: 2 }} />

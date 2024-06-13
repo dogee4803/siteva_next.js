@@ -5,7 +5,7 @@ import { AvatarIcon } from "../Avatar/Avatar";
 interface ProfileInfoProps {
   name: string;
   email: string;
-  registrationDate: string;
+  createdAt: string;
   height: string;
   age: string;
   image: string;
