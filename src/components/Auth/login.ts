@@ -15,7 +15,7 @@ const login = async (values: z.infer<typeof SignInSchema>) => {
   
     const { email, password } = validatedFields.data;
     try {
-      await signIn("credentials", {
+      const signInData = await signIn("credentials", {
         email,
         password,
         redirect: false,
@@ -24,9 +24,9 @@ const login = async (values: z.infer<typeof SignInSchema>) => {
       if (error instanceof AuthError) {
         switch (error.type) {
           case "CredentialsSignin":
-            throw new Error("Неверный email или пароль");
+            return {error: "Неверный email или пароль"}
           default:
-            throw new Error("Произошла ошибка при входе");
+            return {error: "Произошла ошибка при входе"}
         }
       }
       console.error(error);

@@ -13,7 +13,7 @@ const page = async () => {
       <ProfileInfo
           name={session?.user!.name!}
           email={session?.user!.email!}
-          registrationDate={session?.user!.registrationdate!}
+          createdAt={session?.user!.createdAt!}
           height="154 см"
           age="32 лет"
           image={session?.user?.image!}

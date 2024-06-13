@@ -7,16 +7,16 @@ import { Box, Button, Grid, Link, Typography, TextField } from '@mui/material';
 import { signIn } from '../../../../auth';
 import { useRouter } from 'next/navigation';
 import styles from "../SignXXForm.module.css";
-import GitHubSignInButton from '../GitHubButton';
-import VKSignInButton from '../VKButton'
 import Alert from '@mui/material/Alert';
 import { useState } from 'react';
 import { SignInSchema } from '@/lib/schemas/signIn-schema';
 import { DEFAULT_LOGINREDIRECT } from '../../../../routes';
 import login from '../login';
+import { AuthError } from 'next-auth';
+import OAuthButton from '../OAuthButton';
 
 const SignInForm = () => {
-  const [error, setError] = useState('');
+  const [myError, setMyError] = useState('');
   const router = useRouter();
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
@@ -27,18 +27,15 @@ const SignInForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof SignInSchema>) => {
-    try {
-      await login(values);
-      // Дополнительные действия после успешного входа
-      router.push(DEFAULT_LOGINREDIRECT);
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError('Произошла неизвестная ошибка');
-      }
+    const signInData = await login(values);
+    if (signInData?.error) {
+      console.log(signInData.error);
+      setMyError("Пароль или почта указаны не верно!");
     }
-  };
+    else {
+      router.push(DEFAULT_LOGINREDIRECT)
+    }
+  }
 
   return (
     <Box
@@ -80,9 +77,9 @@ const SignInForm = () => {
             />
           </Grid>
         </Grid>
-          {error && (
+          {myError && (
             <Alert severity="error" sx={{ mt: 3, my: 3 }}>
-              {error}
+              {myError}
             </Alert>
           )}
         <Button className={styles.signButton} type="submit" fullWidth sx={{ mt: 3 }}>
@@ -93,8 +90,10 @@ const SignInForm = () => {
           <Typography sx={{ px: 2, color: 'text.secondary' }}>или</Typography>
           <Box sx={{ flexGrow: 1, bgcolor: 'divider', height: 2 }} />
         </Box>
-        <GitHubSignInButton/>
-        <VKSignInButton />
+        <OAuthButton icon='/github-mark-white.svg' icon_alt='GitHub Icon' text='Продолжить через GitHub' provider='github'/>
+        <OAuthButton icon='/VK Logo.svg' icon_alt='VK Icon' text='Продолжить через VK' provider='vk'/>
+        <OAuthButton icon='/Yandex_icon.svg' icon_alt='yandex Icon' text='Продолжить через Яндекс' provider='yandex'/>
+        <OAuthButton icon='/' icon_alt='' text='' provider=''/>
         <Typography variant="body2" align="center" color="text.secondary" sx={{ mt: 2 }}>
           Если у вас нет аккаунта, пожалуйста,&nbsp;
           <Link href="/sign-up" color="primary" underline="hover">

@@ -1,4 +1,6 @@
 import GitHub from "next-auth/providers/github";
+import vk from "next-auth/providers/vk";
+import yandex from "next-auth/providers/yandex";
 import Credentials from "next-auth/providers/credentials";
 
 import type { NextAuthConfig } from "next-auth";
@@ -7,8 +9,10 @@ import { SignInSchema } from "@/lib/schemas/signIn-schema";
 import { getUserByEmail } from "@/data/user";
 import { compare } from "bcryptjs";
 
+
 // Notice this is only an object, not a full Auth.js instance
 export default {
+  debug: true,
   providers: [
     Credentials({
       authorize: async(credentials) => {
@@ -31,6 +35,17 @@ export default {
         return null;
       }
     }),
-    GitHub,
+    GitHub({
+      clientId: process.env.AUTH_GITHUB_ID as string,
+      clientSecret: process.env.AUTH_GITHUB_SECRET as string,
+    }),
+    vk({
+      clientId: process.env.AUTH_VK_ID,
+      clientSecret: process.env.AUTH_VK_SECRET,
+    }),
+    yandex({
+      clientId: process.env.AUTH_YANDEX_ID as string,
+      clientSecret: process.env.AUTH_YANDEX_SECRET as string,
+    }),
   ],
 } satisfies NextAuthConfig

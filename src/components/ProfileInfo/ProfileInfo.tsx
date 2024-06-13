@@ -14,12 +14,12 @@ interface ProfileInfoProps {
 export const ProfileInfo: React.FC<ProfileInfoProps> = ({
   name,
   email,
-  registrationDate,
+  createdAt: createdAt,
   height,
   age,
   image,
 }) => {
-  const formattedRegistrationDate = new Date(registrationDate).toLocaleDateString('ru-RU', {
+  const formattedRegistrationDate = new Date(createdAt).toLocaleDateString('ru-RU', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric'

@@ -15,9 +15,10 @@ const page = async () => {
           <ProfileInfo
             name={session?.user!.name!}
             email={session?.user!.email!}
-            registrationDate={session?.user!.registrationdate!}
+            createdAt={session?.user!.createdAt!}
             height="180 см"
             age="35 лет"
+            image={session?.user!.image!}
           />
         </Grid>
         <Grid item xs={12} sm={8} md={6}>
