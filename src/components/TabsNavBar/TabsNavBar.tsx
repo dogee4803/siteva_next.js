@@ -13,7 +13,7 @@
   import { Link } from "@mui/material";
 
   export const TabsNavBar = () => {
-    const [value, setValue] = useState(false);
+    const [value, setValue] = useState("1");
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
       setValue(newValue);
     };
