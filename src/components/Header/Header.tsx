@@ -8,9 +8,7 @@ import Link from "next/link";
 import Button from "@mui/material/Button";
 import styles from "./Header.module.css";
 import SignOutButton from "./SignOutButton";
-import ThemeButton from "./ChangeThemeButton";
 import { auth } from "../../../auth"
-//import NextAuth from "next-auth"
 
 
 export const Header = async () => {
@@ -35,7 +33,6 @@ export const Header = async () => {
               </div>
             </Link>
           </div>
-          <ThemeButton />
           {session?.user ? (
             <>
               <div> Signed in as {session.user.email} </div>

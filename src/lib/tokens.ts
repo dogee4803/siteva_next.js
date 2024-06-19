@@ -10,7 +10,6 @@ export const generateTwoFactorToken = async (email: string) => {
     const expires = new Date(new Date().getTime() + 5 * 60 * 1000);
 
     const existingToken = await getTwoFactorTokenByemail(email);
-    // Уменьшить время
     if (existingToken) {
         await db.twoFactorToken.delete({
             where: {

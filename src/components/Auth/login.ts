@@ -14,7 +14,6 @@ import {
 } from "@/lib/tokens";
 import { getUserByEmail } from "@/lib/user";
 import { getTwoFactorTokenByemail } from "@/lib/two-factor-token";
-import { error } from "console";
 import db from "@/lib/db";
 import { getTwoFactorConfirmationByUserId } from "@/lib/two-factor-confirmation";
 
@@ -31,7 +30,7 @@ const login = async (values: z.infer<typeof SignInSchema>) => {
     const existingUser = await getUserByEmail(email);
 
     if (!existingUser || !existingUser.email || !existingUser.password){
-      return { error: "Email does not exist!"}
+      return { error: "Эл. почта не существует!"}
     }
 
     if (!existingUser.emailVerified) {

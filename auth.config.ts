@@ -38,14 +38,17 @@ export default {
     GitHub({
       clientId: process.env.AUTH_GITHUB_ID as string,
       clientSecret: process.env.AUTH_GITHUB_SECRET as string,
+      allowDangerousEmailAccountLinking: true,
     }),
     vk({
-      clientId: process.env.AUTH_VK_ID,
-      clientSecret: process.env.AUTH_VK_SECRET,
+      clientId: process.env.AUTH_VK_ID as string,
+      clientSecret: process.env.AUTH_VK_SECRET as string,
+      allowDangerousEmailAccountLinking: true,
     }),
     yandex({
       clientId: process.env.AUTH_YANDEX_ID as string,
       clientSecret: process.env.AUTH_YANDEX_SECRET as string,
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
 } satisfies NextAuthConfig

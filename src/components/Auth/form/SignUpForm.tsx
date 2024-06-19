@@ -40,11 +40,11 @@ const SignUpForm = () => {
       })
 
       if (response.ok) {
-        console.log('Form submitted successfully');
+        console.log('Форма отправлена успешно!');
         console.log(response) 
         router.push('/sign-in')
       } else {
-        console.error('Error submitting form');
+        console.error('Ошибка отправки формы');
         const status = response.status;
         if (status === 408) {
           setError("Данная почта уже зарегестрирована!");
@@ -58,7 +58,7 @@ const SignUpForm = () => {
         console.log(response)
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error('Ошибка отправки формы:', error);
     }
   };
 

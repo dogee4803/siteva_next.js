@@ -13,6 +13,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
+import PeopleIcon from "@mui/icons-material/People";
 import { useState } from "react";
 import styles from "./LeftDrawer.module.css";
 import Link from "next/link";
@@ -71,6 +72,14 @@ export const LeftDrawer = () => {
                     <SettingsIcon />
                   </ListItemIcon>
                   <ListItemText primary="Сервисы" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <PeopleIcon />
+                  </ListItemIcon>
+                  <Link className={styles.Link} href="/pages/allUsers">Все пользователи</Link>
                 </ListItemButton>
               </ListItem>
             </List>
