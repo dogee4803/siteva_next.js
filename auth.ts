@@ -5,7 +5,11 @@ import authConfig from "./auth.config";
 import { getUserById } from "@/lib/user";
 import { getTwoFactorConfirmationByUserId } from "@/lib/two-factor-confirmation";
 
-
+interface SessionUser {
+  id: string;
+  createdAt: Date;
+  isTwoFactorEnabled: boolean;
+}
 
 export const { 
   handlers: { GET, POST },
@@ -29,7 +33,7 @@ export const {
       //Allow OAuth without email verification
       if (account?.provider !== "credentials") return true;
 
-      const existingUser = await getUserById(user.id);
+      const existingUser = await getUserById(user.id as string);
 
       // Prevent sign-in without email verification
       if (!existingUser?.emailVerified) return false;
@@ -55,7 +59,7 @@ export const {
       if (token.sub && session.user) {
         session.user.id = token.sub;
         session.user.createdAt = token.createdAt;
-        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled;
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
       }
       
       return session
